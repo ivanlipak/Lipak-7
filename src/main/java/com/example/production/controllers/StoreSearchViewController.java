@@ -1,4 +1,4 @@
 package com.example.production.controllers;
 
-public class StoreController {
+public class StoreSearchViewController {
 }

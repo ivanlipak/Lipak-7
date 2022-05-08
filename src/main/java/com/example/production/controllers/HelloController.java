@@ -1,4 +1,4 @@
-package com.example.production;
+package com.example.production.controllers;
 
 import com.example.production.model.*;
 import javafx.beans.property.SimpleStringProperty;
