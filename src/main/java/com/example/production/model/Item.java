@@ -109,4 +109,5 @@ public class Item extends NamedEntity implements Serializable {
                 '}'
                 + "\n";
     }
+
 }

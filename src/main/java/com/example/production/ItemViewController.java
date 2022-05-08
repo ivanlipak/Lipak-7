@@ -1,4 +1,4 @@
-package com.example.production.controllers;
+package com.example.production;
 
 
 import com.example.production.model.Item;
