@@ -24,7 +24,7 @@
         <RowConstraints maxHeight="224.0" minHeight="10.0" prefHeight="129.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-        <fx:include source="../navbar.fxml"/>
+        <fx:include source="navbar.fxml"/>
         <Label text="Category name" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
         <Label text="Category Description" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
         <TextField fx:id="categroyNameTextField" GridPane.columnIndex="1" GridPane.rowIndex="1">

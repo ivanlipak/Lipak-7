@@ -1,43 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.production.controllers.NavbarController"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.production.controllers.NavbarController">
 
 <MenuBar prefHeight="25.0" prefWidth="606.0" GridPane.columnSpan="2" GridPane.valignment="TOP">
     <menus>
 
         <Menu mnemonicParsing="false" text="Category">
             <items>
-                <MenuItem mnemonicParsing="false" text="Search Category" />
+                <MenuItem mnemonicParsing="false" onAction="#showSearchCategoryScreen" text="Search Category" />
             </items>
             <items>
-                <MenuItem mnemonicParsing="false" text="Add Category" />
+                <MenuItem mnemonicParsing="false" onAction="#showAddCategoryScreen" text="Add Category" />
             </items>
         </Menu>
 
         <Menu mnemonicParsing="false" text="Store">
             <items>
-                <MenuItem mnemonicParsing="false" text="Search Store" />
+                <MenuItem mnemonicParsing="false" onAction="#showSearchStoreScreen" text="Search Store" />
             </items>
             <items>
-                <MenuItem mnemonicParsing="false" text="Add Store" />
+                <MenuItem mnemonicParsing="false" onAction="#showAddStoreScreen" text="Add Store" />
             </items>
         </Menu>
 
         <Menu mnemonicParsing="false" text="Factory">
             <items>
-                <MenuItem mnemonicParsing="false" text="Search Factories" />
+                <MenuItem mnemonicParsing="false" onAction="#showSearchFactoryScreen" text="Search Factories" />
             </items>
             <items>
-                <MenuItem mnemonicParsing="false" text="Add Factory" />
+                <MenuItem mnemonicParsing="false" onAction="#showAddFactoryScreen" text="Add Factory" />
+            </items>
+        </Menu>
+
+        <Menu mnemonicParsing="false" text="Item">
+            <items>
+                <MenuItem mnemonicParsing="false" onAction="#showSearchItemsScreen" text="Search Item" />
+            </items>
+            <items>
+                <MenuItem mnemonicParsing="false" onAction="#showAddItemsScreen" text="Add Item" />
             </items>
         </Menu>
 
