@@ -8,12 +8,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.example.production.documents.ReadTxt.*;
 
@@ -34,7 +31,7 @@ public class FactoryViewController {
     private TableColumn<Factory, String> factoryItemsColumn;
 
     private List<Factory> factoryList;
-    private String itemiString;
+    private String itemsString;
     private String addressString;
 
     public void initialize(){
@@ -58,22 +55,6 @@ public class FactoryViewController {
         ObservableList<Factory> factoryObservableList = FXCollections.observableList(factoryList);
         factoryTableVieW.setItems(factoryObservableList);
    }
-
-   public String getItemiString (Factory factory){
-       itemiString = "";
-       for(Item item : factory.getItems()){
-           itemiString = itemiString + item.getName() + "\n";
-       }
-       return itemiString;
-   }
-
-   public String getAddressString (Factory factory){
-        addressString = "";
-        addressString = factory.getAddress().getCity().getCityName() + System.lineSeparator() + factory.getAddress().getCity().getPostNr()+ System.lineSeparator()
-                + factory.getAddress().getStreet() + System.lineSeparator() + factory.getAddress().getHouseNumber() + " ";
-        return addressString;
-   }
-
 
     public void search(){
         String factoryName = factoryNameTextField.getText();
@@ -104,6 +85,27 @@ public class FactoryViewController {
         ObservableList<Factory> observableList = FXCollections.observableList(filteredList);
         factoryTableVieW.setItems(observableList);
 
+    }
+
+    public String getItemiString (Factory factory){
+        itemsString = "";
+        for(Item item : factory.getItems()){
+            itemsString = itemsString + item.getName() + "\n";
+        }
+        return itemsString;
+    }
+
+    public String getAddressString (Factory factory){
+        addressString = "";
+        addressString = factory.getAddress().getCity().getCityName()
+                + System.lineSeparator()
+                + factory.getAddress().getCity().getPostNr()
+                + System.lineSeparator()
+                + factory.getAddress().getStreet()
+                + " "
+                + factory.getAddress().getHouseNumber()
+                + " ";
+        return addressString;
     }
 
 }
