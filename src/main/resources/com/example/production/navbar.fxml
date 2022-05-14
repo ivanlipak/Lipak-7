@@ -6,9 +6,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.GridPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.production.NavbarController">
+<AnchorPane prefHeight="400.0" prefWidth="600" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.production.NavbarController">
 
-<MenuBar prefHeight="25.0" prefWidth="606.0" GridPane.columnSpan="2" GridPane.valignment="TOP">
+<MenuBar layoutY="2.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="600.0" GridPane.columnSpan="2" GridPane.valignment="TOP">
     <menus>
 
         <Menu mnemonicParsing="false" text="Category">

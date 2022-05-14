@@ -9,7 +9,7 @@ import java.io.IOException;
 public class NavbarController {
 
     public void showSearchCategoryScreen() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("category-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
         HelloApplication.getMainStage().setTitle("Categories");
         HelloApplication.getMainStage().setScene(scene);

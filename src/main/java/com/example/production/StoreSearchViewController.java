@@ -1,7 +1,5 @@
 package com.example.production;
 
-import com.example.production.model.Address;
-import com.example.production.model.Factory;
 import com.example.production.model.Item;
 import com.example.production.model.Store;
 import javafx.beans.property.SimpleStringProperty;
@@ -11,11 +9,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-
 import java.util.List;
 
 import static com.example.production.documents.ReadTxt.*;
-import static com.example.production.documents.ReadTxt.readFactory;
+
 
 public class StoreSearchViewController {
 

@@ -16,7 +16,7 @@ import java.util.List;
 
 import static com.example.production.documents.ReadTxt.readCategories;
 
-public class HelloController {
+public class CategoryController {
 
     @FXML
     private TextField categroyNameTextField;

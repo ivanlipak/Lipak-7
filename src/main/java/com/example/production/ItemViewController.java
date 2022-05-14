@@ -1,11 +1,13 @@
 package com.example.production;
 
 
+import com.example.production.model.Category;
 import com.example.production.model.Item;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -23,8 +25,6 @@ public class ItemViewController {
     @FXML
     private TextField itemNameTextField;
     @FXML
-    private TextField itemCategoryTextField;
-    @FXML
     private TextField itemWidthTextField;
     @FXML
     private TextField itemLengthTextField;
@@ -32,6 +32,8 @@ public class ItemViewController {
     private TextField itemHeightTextField;
     @FXML
     private TextField itemPriceTextField;
+    @FXML
+    private ChoiceBox categoryChoiceBox;
 
     @FXML
     private TableView<Item> itemTableView;
@@ -76,6 +78,19 @@ public class ItemViewController {
                 setCellValueFactory(cellData ->
                         new SimpleStringProperty(cellData.getValue().getSellingPrice().toString()));
 
+
+        List<Category> categoriesList = List.of(readCategories());
+        List<String> categoryListString = new ArrayList<>();
+        categoryListString.add(
+                "None"
+        );
+        categoryListString.addAll(categoriesList.stream().map(c -> c.getName()).toList());
+
+        ObservableList<String> obsCatList = FXCollections.observableList(categoryListString);
+        categoryChoiceBox.setItems(obsCatList);
+        categoryChoiceBox.setValue("None");
+
+
         itemList = readItems(readCategories());
 
         ObservableList<Item> itemsObservableList = FXCollections.observableList(itemList);
@@ -86,11 +101,11 @@ public class ItemViewController {
     @FXML
     public void search(){
         String itemName = itemNameTextField.getText();
-        String itemCategory = itemCategoryTextField.getText();
         String itemWidth = itemWidthTextField.getText();
         String itemLength = itemLengthTextField.getText();
         String itemHeight = itemHeightTextField.getText();
         String itemPrice = itemPriceTextField.getText();
+        String itemCatChoice = categoryChoiceBox.getValue().toString();
 
         List<Item> filteredList = new ArrayList<>(itemList);
 
@@ -101,10 +116,10 @@ public class ItemViewController {
                     .toList();
         }
 
-        if(!itemCategory.isEmpty()){
+        if(!itemCatChoice.isEmpty() || itemCatChoice.equals("None")){
             filteredList = filteredList
                     .stream()
-                    .filter(item -> item.getCategory().getName().toLowerCase().contains(itemCategory.toLowerCase()))
+                    .filter(item -> item.getCategory().getName().toLowerCase().contains(itemCatChoice.toLowerCase()))
                     .toList();
         }
         if(!itemHeight.isEmpty()){
