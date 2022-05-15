@@ -33,7 +33,7 @@ public class StoreSearchViewController {
     @FXML
     private TableColumn<Store, String> storeItemTextColumn;
 
-    private List<Store> storeList;
+    public static List<Store> storeList;
     private String itemsString;
 
 
@@ -51,7 +51,7 @@ public class StoreSearchViewController {
                         new SimpleStringProperty(getItemiString(cellData.getValue())));
 
         List<Item> itemList = readItems(readCategories());
-        storeList = List.of(readStore(itemList));
+        storeList = readStore(itemList);
 
 
         ObservableList<Store> factoryObservableList = FXCollections.observableList(storeList);

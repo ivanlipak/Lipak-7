@@ -13,31 +13,28 @@ import java.util.*;
 
 public class ReadTxt {
 
-    public static Category[] readCategories() {
-        Category[] categoryArray = new Category[3];
+    public static List<Category> readCategories() {
+        List<Category> categoryList = new ArrayList<>();
 
         File coursesFile = new File("dat/categories.txt");
 
         try (BufferedReader lineReader = new BufferedReader(new FileReader(coursesFile))) {
             String line;
-            int i = 0;
             while((line = lineReader.readLine()) != null)  {
                 Long id = Long.parseLong(line);
                 String categoryName = lineReader.readLine();
                 String categoryDescription = lineReader.readLine();
                 Category newCategory = new Category(id, categoryName, categoryDescription);
-                categoryArray[i] = newCategory;
-                i++;
+                categoryList.add(newCategory);
             }
         }
         catch (IOException ex) {
             ex.printStackTrace();
         }
-
-        return categoryArray;
+        return categoryList;
     }
-    public static Factory[] readFactory(List<Item> items, List<Address> addresses) {
-        Factory[] factoryArray = new Factory[4];
+    public static List<Factory> readFactory(List<Item> items, List<Address> addresses) {
+        List<Factory> factoryArray = new ArrayList<>();
 
         File coursesFile = new File("dat/factories.txt");
 
@@ -60,7 +57,7 @@ public class ReadTxt {
                     }
                 }
                 Factory newFactory = new Factory(id, factoryName, addresses.get(Integer.valueOf(addressString)), itemSet);
-                factoryArray[i] = newFactory;
+                factoryArray.add(newFactory);
                 i++;
             }
         }
@@ -69,8 +66,8 @@ public class ReadTxt {
         }
         return factoryArray;
     }
-    public static Store[] readStore(List<Item> items) {
-        Store[] storeArray = new Store[6];
+    public static List<Store> readStore(List<Item> items) {
+        List<Store> storeArray = new ArrayList<>();
 
         File coursesFile = new File("dat/stores.txt");
 
@@ -93,7 +90,7 @@ public class ReadTxt {
                     }
                 }
                 Store newStore = new Store(id, storeName, webAddress, itemSet);
-                storeArray[i] = newStore;
+                storeArray.add(newStore);
                 i++;
             }
         }
@@ -103,7 +100,7 @@ public class ReadTxt {
 
         return storeArray;
     }
-    public static List<Item> readItems(Category[] categories) {
+    public static List<Item> readItems(List<Category> categories) {
         List<Item> itemList = new ArrayList<>();
 
         File coursesFile = new File("dat/items.txt");
@@ -122,7 +119,7 @@ public class ReadTxt {
                 String sellPrice = lineReader.readLine();
                 String discount = lineReader.readLine();
 
-                Item newItem = new Item(id, itemName, categories[Integer.valueOf(categoryString)-1], BigDecimal.valueOf(Integer.valueOf(width)),
+                Item newItem = new Item(id, itemName, categories.get(Integer.valueOf(categoryString)-1), BigDecimal.valueOf(Integer.valueOf(width)),
                         BigDecimal.valueOf(Integer.valueOf(height)), BigDecimal.valueOf(Integer.valueOf(length)), BigDecimal.valueOf(Integer.valueOf(prodCost)),
                         BigDecimal.valueOf(Integer.valueOf(sellPrice)), new Discount(BigDecimal.valueOf(Integer.valueOf(discount))));
                 itemList.add(newItem);

@@ -51,7 +51,7 @@ public class ItemViewController {
     @FXML
     private TableColumn<Item, String> itemPriceColumn;
 
-    private List<Item> itemList;
+    public static List<Item> itemList;
 
     public void initialize(){
         itemNameColumn.
@@ -79,19 +79,19 @@ public class ItemViewController {
                         new SimpleStringProperty(cellData.getValue().getSellingPrice().toString()));
 
 
-        List<Category> categoriesList = List.of(readCategories());
+        List<Category> categoriesList = readCategories();
         List<String> categoryListString = new ArrayList<>();
         categoryListString.add(
                 "None"
         );
         categoryListString.addAll(categoriesList.stream().map(c -> c.getName()).toList());
 
+        itemList = readItems(readCategories());
         ObservableList<String> obsCatList = FXCollections.observableList(categoryListString);
         categoryChoiceBox.setItems(obsCatList);
         categoryChoiceBox.setValue("None");
 
 
-        itemList = readItems(readCategories());
 
         ObservableList<Item> itemsObservableList = FXCollections.observableList(itemList);
         itemTableView.setItems(itemsObservableList);

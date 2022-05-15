@@ -29,7 +29,7 @@ public class CategoryController {
     @FXML
     private TableColumn<Category, String> categoryDescriptionColumn;
 
-    private List<Category> categoryList;
+    public static List<Category> categoryList;
 
     public void initialize(){
         categoryNameColumn.
@@ -40,8 +40,7 @@ public class CategoryController {
                 setCellValueFactory(cellData ->
                         new SimpleStringProperty(cellData.getValue().getDescription()));
 
-        Category[] categoryArray = readCategories();
-        categoryList = Arrays.stream(categoryArray).toList();
+        categoryList = readCategories();
 
         ObservableList<Category> categoryObservableList = FXCollections.observableList(categoryList);
         categoryTableView.setItems(categoryObservableList);

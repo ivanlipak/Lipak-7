@@ -30,7 +30,7 @@ public class FactoryViewController {
     @FXML
     private TableColumn<Factory, String> factoryItemsColumn;
 
-    private List<Factory> factoryList;
+    public static List<Factory> factoryList;
     private String itemsString;
     private String addressString;
 
@@ -49,7 +49,7 @@ public class FactoryViewController {
 
          List<Item> itemList = readItems(readCategories());
          List<Address> addresses = readAddresses();
-         factoryList = List.of(readFactory(itemList, addresses));
+         factoryList = readFactory(itemList, addresses);
 
 
         ObservableList<Factory> factoryObservableList = FXCollections.observableList(factoryList);
