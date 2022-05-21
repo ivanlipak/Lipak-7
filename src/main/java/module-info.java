@@ -5,5 +5,6 @@ module com.example.production {
 
     opens com.example.production to javafx.fxml;
     exports com.example.production;
+    exports com.example.production.model;
 
 }

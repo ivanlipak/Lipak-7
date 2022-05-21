@@ -71,4 +71,13 @@ public class NavbarController {
         HelloApplication.getMainStage().setScene(scene);
         HelloApplication.getMainStage().show();
     }
+
+
+    public void showItemEditView() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("item-edit-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        HelloApplication.getMainStage().setTitle("Edit");
+        HelloApplication.getMainStage().setScene(scene);
+        HelloApplication.getMainStage().show();
+    }
 }

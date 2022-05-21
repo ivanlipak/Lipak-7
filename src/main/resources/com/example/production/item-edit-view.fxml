@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: radial-gradient(center 50px 50px, radius 100px, lightblue, lightslategray);" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.production.ItemEditController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    </rowConstraints>
+    <children>
+        <fx:include source="navbar.fxml" />
+        <Label text="Name" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+        <Label text="Category" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+        <Label text="Width" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+        <Label text="Height" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+        <Label text="Length" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+        <Label text="Price" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+        <TextField fx:id="itemHeightTextField" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+            <GridPane.margin>
+                <Insets left="10.0" right="10.0" />
+            </GridPane.margin>
+        </TextField>
+        <TextField fx:id="itemNameTextField" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+            <GridPane.margin>
+                <Insets left="10.0" right="10.0" />
+            </GridPane.margin>
+        </TextField>
+        <TextField fx:id="itemPriceTextField" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+            <GridPane.margin>
+                <Insets left="10.0" right="10.0" />
+            </GridPane.margin>
+        </TextField>
+        <TextField fx:id="itemLengthTextField" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+            <GridPane.margin>
+                <Insets left="10.0" right="10.0" />
+            </GridPane.margin>
+        </TextField>
+        <TextField fx:id="itemWidthTextField" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+            <GridPane.margin>
+                <Insets left="10.0" right="10.0" />
+            </GridPane.margin>
+        </TextField>
+        <Button mnemonicParsing="false" text="Search" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+        <TableView fx:id="itemTableView" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.rowIndex="5" GridPane.rowSpan="2">
+            <columns>
+                <TableColumn fx:id="itemNameColumn" prefWidth="158.0" text="Name" />
+                <TableColumn fx:id="itemCategoryColumn" prefWidth="107.0" text="Category" />
+                <TableColumn fx:id="itemPriceColumn" prefWidth="95.0" text="Price" />
+                <TableColumn fx:id="itemWidthColumn" prefWidth="86.0" text="Width" />
+                <TableColumn fx:id="itemHeightColumn" prefWidth="82.0" text="Height" />
+                <TableColumn fx:id="itemLengthColumn" prefWidth="71.0" text="Length" />
+            </columns>
+        </TableView>
+        <ChoiceBox fx:id="categoryChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <GridPane.margin>
+                <Insets left="10.0" right="10.0" />
+            </GridPane.margin></ChoiceBox>
+    </children>
+</GridPane>

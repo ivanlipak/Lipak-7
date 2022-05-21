@@ -56,7 +56,7 @@ public class ReadTxt {
                         }
                     }
                 }
-                Factory newFactory = new Factory(id, factoryName, addresses.get(Integer.valueOf(addressString)), itemSet);
+                Factory newFactory = new Factory(id, factoryName, addresses.get(Integer.valueOf(addressString)-1), itemSet);
                 factoryArray.add(newFactory);
                 i++;
             }
@@ -66,6 +66,8 @@ public class ReadTxt {
         }
         return factoryArray;
     }
+
+
     public static List<Store> readStore(List<Item> items) {
         List<Store> storeArray = new ArrayList<>();
 
@@ -157,6 +159,9 @@ public class ReadTxt {
                     case "velika gorica":
                         city= City.VELIKAGORICA;
                         break;
+                    case "velikagorica":
+                        city= City.VELIKAGORICA;
+                        break;
                 }
 
                 Address newAddress = new Address().Builder()
@@ -164,6 +169,7 @@ public class ReadTxt {
                         .Street(factoryStreet)
                         .HouseNumber(factoryHouseNumber)
                         .City(city);
+                System.out.println(newAddress.toString());
                 addressList.add(newAddress);
             }
         }
