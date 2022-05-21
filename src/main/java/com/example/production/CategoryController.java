@@ -6,10 +6,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,8 +34,13 @@ public class CategoryController {
     private TableColumn<Category, String> categoryNameColumn;
     @FXML
     private TableColumn<Category, String> categoryDescriptionColumn;
+    @FXML
+    private TableColumn<Category, String> radioButton;
+    private ToggleGroup group1;
 
     public static List<Category> categoryList;
+    public static ObservableList<Category> categoryObservableList;
+    public static Integer forEdit;
 
     public void initialize(){
         categoryNameColumn.
@@ -40,10 +51,20 @@ public class CategoryController {
                 setCellValueFactory(cellData ->
                         new SimpleStringProperty(cellData.getValue().getDescription()));
 
+
+
         categoryList = readCategories();
 
-        ObservableList<Category> categoryObservableList = FXCollections.observableList(categoryList);
+        categoryObservableList = FXCollections.observableList(categoryList);
         categoryTableView.setItems(categoryObservableList);
+
+        group1 = new ToggleGroup();
+        for(Category category : categoryObservableList){
+            category.getRadioButton().setToggleGroup(group1);
+        }
+        radioButton.setCellValueFactory(
+                new PropertyValueFactory<Category, String>("radioButton")
+        );
 
     }
 
@@ -69,5 +90,21 @@ public class CategoryController {
 
         ObservableList<Category> observableList = FXCollections.observableList(filteredList);
         categoryTableView.setItems(observableList);
+    }
+
+
+    public void editB () throws IOException {
+        for (Category category : categoryObservableList){
+            if(category.getRadioButton().isSelected()){
+                forEdit = Integer.valueOf(category.getId().toString())-1;
+            }
+        }
+
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("Edit-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 400, 400);
+        Stage stage = new Stage();
+        stage.setTitle("Edit");
+        stage.setScene(scene);
+        stage.show();
     }
 }

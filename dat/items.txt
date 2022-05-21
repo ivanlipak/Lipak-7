@@ -5,7 +5,7 @@ Bijeli Kruh
 12
 12
 11
-20
+100
 2
 2
 Maslac
@@ -20,7 +20,7 @@ Maslac
 Toshiba Satelite
 2
 10
-10
+100000000
 10
 546
 200
@@ -32,12 +32,12 @@ Dell Vostro
 55
 55
 54
-2543
+25
 4
 5
 Alienware
 2
-12
+20
 12
 12
 6542
