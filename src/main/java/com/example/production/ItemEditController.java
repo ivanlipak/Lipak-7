@@ -1,5 +1,6 @@
 package com.example.production;
 
+import com.example.production.documents.Database;
 import com.example.production.model.Item;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -12,6 +13,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,74 +50,15 @@ public class ItemEditController {
 
     public static List<Item> itemList;
 
-    public void initialize(){
-        itemTableView.setEditable(true);
+    public void initialize() throws SQLException {
         itemNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
-        itemNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        itemNameColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Item, String>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<Item, String> event) {
-                Item item = event.getRowValue();
-                item.setName(event.getNewValue());
-                txtMaker();
-            }
-        });
-
         itemCategoryColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCategory().getName()));
-        itemCategoryColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        itemCategoryColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Item, String>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<Item, String> event) {
-                Item item = event.getRowValue();
-                item.getCategory().setName(event.getNewValue());
-                txtMaker();
-            }
-        });
-
         itemWidthColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getWidth().toString()));
-        itemWidthColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        itemWidthColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Item, String>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<Item, String> event) {
-                Item item = event.getRowValue();
-                item.setWidth(new BigDecimal(event.getNewValue()));
-                txtMaker();
-            }
-        });
         itemLengthColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getLength().toString()));
-        itemLengthColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        itemLengthColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Item, String>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<Item, String> event) {
-                Item item = event.getRowValue();
-                item.setLength(new BigDecimal(event.getNewValue()));
-                txtMaker();
-            }
-        });
-
         itemHeightColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getHeight().toString()));
-        itemHeightColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        itemHeightColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Item, String>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<Item, String> event) {
-                Item item = event.getRowValue();
-                item.setHeight(new BigDecimal(event.getNewValue()));
-                txtMaker();
-            }
-        });
-
         itemPriceColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSellingPrice().toString()));
-        itemPriceColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        itemPriceColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Item, String>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<Item, String> event) {
-                Item item = event.getRowValue();
-                item.setSellingPrice(new BigDecimal(event.getNewValue()));
-                txtMaker();
-            }
-        });
 
-        itemList = readItems(readCategories());
+        itemList = Database.databaseReadItems();
 
         itemsObservableList = FXCollections.observableList(itemList);
         itemTableView.setItems(itemsObservableList);
@@ -180,6 +123,7 @@ public class ItemEditController {
                 writer.close();
             } catch (IOException e) {
                 e.printStackTrace();
+
             }
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

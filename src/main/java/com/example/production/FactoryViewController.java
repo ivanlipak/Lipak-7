@@ -1,5 +1,6 @@
 package com.example.production;
 
+import com.example.production.documents.Database;
 import com.example.production.model.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -9,6 +10,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,9 +49,18 @@ public class FactoryViewController {
                 setCellValueFactory(cellData ->
                         new SimpleStringProperty(getItemiString(cellData.getValue())));
 
-         List<Item> itemList = readItems(readCategories());
-         List<Address> addresses = readAddresses();
-         factoryList = readFactory(itemList, addresses);
+        List<Item> itemList = null;
+        List<Address> addresses = null;
+        try {
+            itemList = Database.databaseReadItems();
+            addresses = Database.databaseReadAddresses();
+            factoryList = Database.databaseReadFactories();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+
 
 
         ObservableList<Factory> factoryObservableList = FXCollections.observableList(factoryList);

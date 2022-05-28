@@ -1,18 +1,21 @@
 package com.example.production;
 
 
+import com.example.production.documents.Database;
 import com.example.production.model.Category;
 import com.example.production.model.Item;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,8 +55,9 @@ public class ItemViewController {
     private TableColumn<Item, String> itemPriceColumn;
 
     public static List<Item> itemList;
+    public static ObservableList<Item> itemsObservableList;
 
-    public void initialize(){
+    public void initialize() throws SQLException {
         itemNameColumn.
                 setCellValueFactory(cellData ->
                         new SimpleStringProperty(cellData.getValue().getName()));
@@ -79,21 +83,21 @@ public class ItemViewController {
                         new SimpleStringProperty(cellData.getValue().getSellingPrice().toString()));
 
 
-        List<Category> categoriesList = readCategories();
+        List<Category> categoriesList = Database.databaseReadCategories();
         List<String> categoryListString = new ArrayList<>();
         categoryListString.add(
                 "None"
         );
         categoryListString.addAll(categoriesList.stream().map(c -> c.getName()).toList());
 
-        itemList = readItems(readCategories());
+        itemList = Database.databaseReadItems();
         ObservableList<String> obsCatList = FXCollections.observableList(categoryListString);
         categoryChoiceBox.setItems(obsCatList);
         categoryChoiceBox.setValue("None");
 
 
 
-        ObservableList<Item> itemsObservableList = FXCollections.observableList(itemList);
+        itemsObservableList = FXCollections.observableList(itemList);
         itemTableView.setItems(itemsObservableList);
 
     }
@@ -147,7 +151,7 @@ public class ItemViewController {
                     .toList();
         }
 
-        ObservableList<Item> observableList = FXCollections.observableList(filteredList);
-        itemTableView.setItems(observableList);
+        itemsObservableList = FXCollections.observableList(filteredList);
+        itemTableView.setItems(itemsObservableList);
     }
 }

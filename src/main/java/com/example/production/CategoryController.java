@@ -1,6 +1,9 @@
 package com.example.production;
 
+import com.example.production.documents.Database;
 import com.example.production.model.*;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,14 +11,12 @@ import javafx.fxml.FXML;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,15 +35,12 @@ public class CategoryController {
     private TableColumn<Category, String> categoryNameColumn;
     @FXML
     private TableColumn<Category, String> categoryDescriptionColumn;
-    @FXML
-    private TableColumn<Category, String> radioButton;
-    private ToggleGroup group1;
 
     public static List<Category> categoryList;
     public static ObservableList<Category> categoryObservableList;
     public static Integer forEdit;
 
-    public void initialize(){
+    public void initialize() throws SQLException {
         categoryNameColumn.
                 setCellValueFactory(cellData ->
                         new SimpleStringProperty(cellData.getValue().getName()));
@@ -53,19 +51,10 @@ public class CategoryController {
 
 
 
-        categoryList = readCategories();
+        categoryList = Database.databaseReadCategories();
 
         categoryObservableList = FXCollections.observableList(categoryList);
         categoryTableView.setItems(categoryObservableList);
-
-        group1 = new ToggleGroup();
-        for(Category category : categoryObservableList){
-            category.getRadioButton().setToggleGroup(group1);
-        }
-        radioButton.setCellValueFactory(
-                new PropertyValueFactory<Category, String>("radioButton")
-        );
-
     }
 
     @FXML
@@ -93,12 +82,8 @@ public class CategoryController {
     }
 
 
-    public void editB () throws IOException {
-        for (Category category : categoryObservableList){
-            if(category.getRadioButton().isSelected()){
-                forEdit = Integer.valueOf(category.getId().toString())-1;
-            }
-        }
+    public void editButton () throws IOException {
+        forEdit = Integer.valueOf(categoryTableView.getSelectionModel().getSelectedItem().getId().toString());
 
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("Edit-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 400, 400);
@@ -107,4 +92,13 @@ public class CategoryController {
         stage.setScene(scene);
         stage.show();
     }
+
+    public void deleteButton () throws SQLException {
+        Database.deleteCategoryById(categoryTableView.getSelectionModel().getSelectedItem().getId());
+        List<Category> temporaryList = Database.databaseReadCategories();
+        categoryObservableList = FXCollections.observableList(temporaryList);
+        initialize();
+    }
+
+
 }

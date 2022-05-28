@@ -1,6 +1,6 @@
 package com.example.production.model;
 
-import javafx.scene.control.Button;
+
 import javafx.scene.control.CheckBox;
 
 import java.io.Serializable;
@@ -28,7 +28,7 @@ public class Item extends NamedEntity implements Serializable {
         this.productionCost = productionCost;
         this.sellingPrice = sellingPrice;
         this.discount = discount;
-        this.checkBox = new CheckBox();
+//        this.checkBox = new CheckBox();
     }
 
     public Discount getDiscount() {

@@ -1,6 +1,8 @@
 package com.example.production;
 
+import com.example.production.documents.Database;
 import com.example.production.model.Category;
+import com.example.production.model.Discount;
 import com.example.production.model.Item;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,6 +13,7 @@ import javafx.scene.control.TextField;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -37,8 +40,8 @@ public class NewItemController {
     private TextField itemDiscount;
 
 
-    public void initialize(){
-        List<Category> categoriesList = readCategories();
+    public void initialize() throws SQLException {
+        List<Category> categoriesList = Database.databaseReadCategories();
         List<String> categoryListString = new ArrayList<>();
         categoryListString.addAll(categoriesList.stream().map(c -> c.getName()).toList());
 
@@ -48,14 +51,16 @@ public class NewItemController {
     }
 
 
-    public void addItem(){
+    public void addItem() throws Exception {
         StringBuilder errorMessages = new StringBuilder();
         String itemNameString = itemName.getText();
         String itemCategoryString = itemCategory.getValue().toString();
         String itemCategoryStringForTxt="";
-        for (Category category : readCategories()){
+        Category categoryForNewItem = null;
+        for (Category category : Database.databaseReadCategories()){
             if (category.getName().equalsIgnoreCase(itemCategoryString)){
-                itemCategoryStringForTxt = category.getId().toString();
+                categoryForNewItem = category;
+                System.out.println(itemCategoryString);
             }
         }
         String itemLengthString = itemLength.getText();
@@ -75,7 +80,7 @@ public class NewItemController {
             errorMessages.append("Length, Heigth, Width, Dicount and Prices of an item must be numbers!");
         }
 
-        List<Item> items = readItems(readCategories());
+        List<Item> items = Database.databaseReadItems();
         for(Item item : items){
             if (itemNameString.equalsIgnoreCase(item.getName())){
                 errorMessages.append("Item already exists!");
@@ -94,39 +99,17 @@ public class NewItemController {
         }
 
         if (errorMessages.isEmpty()) {
-            File categoryFile = new File("dat/items.txt");
-            try (BufferedReader lineReader = new BufferedReader(new FileReader(categoryFile))){
-                String line;
-                String content="";
-                int i = 1;
-                while((line = lineReader.readLine())!=null){
-                    content = content + line + System.lineSeparator();
-                    i++;
-                }
-                content = content +
-                        Integer.valueOf((i/9) + 1).toString() +
-                        System.lineSeparator() +
-                        itemNameString +
-                        System.lineSeparator() +
-                        itemCategoryStringForTxt +
-                        System.lineSeparator() +
-                        itemWidthString +
-                        System.lineSeparator() +
-                        itemHeightString +
-                        System.lineSeparator() +
-                        itemLengthString +
-                        System.lineSeparator() +
-                        itemProductionPriceString +
-                        System.lineSeparator() +
-                        itemSellingPriceString +
-                        System.lineSeparator() +
-                        itemDiscountString;
-                FileWriter writer = new FileWriter(categoryFile);
-                writer.write(content);
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Item newItem = new Item(1L,
+                    itemNameString,
+                    categoryForNewItem,
+                    new BigDecimal(itemWidthString),
+                    new BigDecimal(itemHeightString),
+                    new BigDecimal(itemLengthString),
+                    new BigDecimal(itemProductionPriceString),
+                    new BigDecimal(itemSellingPriceString),
+                    new Discount(new BigDecimal(itemWidthString))
+            );
+            Database.addItem(newItem);
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("New category has been successfully added!");

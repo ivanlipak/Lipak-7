@@ -1,5 +1,6 @@
 package com.example.production;
 
+import com.example.production.documents.Database;
 import com.example.production.model.Category;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -14,7 +15,7 @@ public class NewCategoryController {
     @FXML
     private TextField categoryDescription;
 
-    public void add(){
+    public void add() throws Exception {
         String categoryNameString = categoryName.getText();
         String categoryDescriptionString = categoryDescription.getText();
         StringBuilder errorMessages = new StringBuilder();
@@ -23,7 +24,7 @@ public class NewCategoryController {
             errorMessages.append("Category name is mandatory!");
         }
 
-        if(categoryNameString.isEmpty()){
+        if(categoryDescriptionString.isEmpty()){
             errorMessages.append("Category description is mandatory!");
         }
         for (Category category : CategoryController.categoryList){
@@ -33,27 +34,8 @@ public class NewCategoryController {
         }
 
         if (errorMessages.isEmpty()) {
-            File categoryFile = new File("dat/categories.txt");
-            try (BufferedReader lineReader = new BufferedReader(new FileReader(categoryFile))){
-                String line;
-                String content="";
-                int i = 1;
-                while((line = lineReader.readLine())!=null){
-                    content = content + line + System.lineSeparator();
-                    i++;
-                }
-                content = content +
-                        Integer.valueOf((i/3) + 1).toString() +
-                        System.lineSeparator() +
-                        categoryNameString +
-                        System.lineSeparator() +
-                        categoryDescriptionString;
-                FileWriter writer = new FileWriter(categoryFile);
-                writer.write(content);
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Category newCategory = new Category(1L, categoryNameString, categoryDescriptionString);
+            Database.addCategory(newCategory);
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("New category has been successfully added!");

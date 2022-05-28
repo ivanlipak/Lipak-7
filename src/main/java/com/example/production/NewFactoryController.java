@@ -1,5 +1,6 @@
 package com.example.production;
 
+import com.example.production.documents.Database;
 import com.example.production.enums.City;
 import com.example.production.model.Address;
 import com.example.production.model.Category;
@@ -8,10 +9,12 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.io.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -45,15 +48,12 @@ public class NewFactoryController {
     private TableColumn<Item, String> itemHeightColumn;
     @FXML
     private TableColumn<Item, String> itemPriceColumn;
-    @FXML
-    private TableColumn<Item, String> checkBoxTableColumn;
 
     private ObservableList<Item> itemsObservableList;
 
     public static List<Item> itemList;
 
     public void initialize(){
-
         itemNameColumn.
                 setCellValueFactory(cellData ->
                         new SimpleStringProperty(cellData.getValue().getName()));
@@ -78,10 +78,11 @@ public class NewFactoryController {
                 setCellValueFactory(cellData ->
                         new SimpleStringProperty(cellData.getValue().getSellingPrice().toString()));
 
-        checkBoxTableColumn.setCellValueFactory(
-                new PropertyValueFactory<Item, String>("checkBox")
-        );
-        itemList = readItems(readCategories());
+        try {
+            itemList = Database.databaseReadItems();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         itemsObservableList = FXCollections.observableList(itemList);
         itemTableView.setItems(itemsObservableList);
 
@@ -96,7 +97,7 @@ public class NewFactoryController {
 
     }
 
-    public void addStore() {
+    public void addStore() throws Exception {
         StringBuilder errorMessages = new StringBuilder();
         String nameString = factoryName.getText();
         String streetString = factoryStreet.getText();
@@ -117,7 +118,7 @@ public class NewFactoryController {
         }
 
         // postoji li adresa
-        List<Address> addresses = readAddresses();
+        List<Address> addresses = Database.databaseReadAddresses();
         Long idAdress = null;
         for (Address address : addresses){
             if (address.getCity().getCityName().equals(cityString)
@@ -127,97 +128,53 @@ public class NewFactoryController {
             }
         }
         // napravi novu adresu
-        String city = null;
-        if(idAdress==null){
-            switch (cityString.toLowerCase()){
-                case "sisak":
-                    city= "SISAK";
-                    break;
-                case "zagreb":
-                    city= "ZAGREB";
-                    break;
-                case "crikvenica":
-                    city= "CRIKVENICA";
-                    break;
-                case "velika gorica":
-                    city= "VELIKAGORICA";
-                    break;
-            }
+        City city = null;
+        switch (cityString.toLowerCase()){
+            case "sisak":
+                city= City.SISAK;
+                break;
+            case "zagreb":
+                city= City.ZAGREB;
+                break;
+            case "crikvenica":
+                city= City.CRIKVENICA;
+                break;
+            case "velika gorica":
+                city= City.VELIKAGORICA;
+                break;
+            case "velikagorica":
+                city= City.VELIKAGORICA;
+                break;
         }
 
         //poberi iteme
         List<Long> chosenItems = new ArrayList<>();
-        for(Item item : itemsObservableList){
-            if(item.getCheckBox().isSelected()){
-                chosenItems.add(item.getId());
-            }
-        }
-        String chosenItemsString="";
-        if(chosenItems.isEmpty()){
-            errorMessages.append("You must choose at least one article!");
-        }else{
-            int brojac=0;
-            for (Long i : chosenItems){
-                brojac++;
-                if(brojac == chosenItems.size()){
-                    chosenItemsString = chosenItemsString + i.toString();
-                }else{
-                    chosenItemsString = chosenItemsString + i.toString() + ",";
-                }
-            }
+        ObservableList<Item> items = itemTableView.getSelectionModel().getSelectedItems();
+        for(Item item : items){
+            chosenItems.add(item.getId());
         }
 
-        if (errorMessages.isEmpty()) {
+       if (errorMessages.isEmpty()) {
             if(idAdress==null){
-                File addressesFile = new File("dat/addresses.txt");
-                try (BufferedReader lineReader = new BufferedReader(new FileReader(addressesFile))){
-                    String line;
-                    String content="";
-                    int i = 1;
-                    while((line = lineReader.readLine())!=null){
-                        content = content + line + System.lineSeparator();
-                        i++;
-                    }
-                    idAdress = Long.valueOf((i/4)+1);
-                    content = content +
-                            Integer.valueOf((i/4) + 1).toString() +
-                            System.lineSeparator() +
-                            streetString +
-                            System.lineSeparator() +
-                            houseNrString +
-                            System.lineSeparator() +
-                            city;
-                    FileWriter writer = new FileWriter(addressesFile);
-                    writer.write(content);
-                    writer.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                Address newAddress = new Address().Builder()
+                        .Id(1L)
+                        .Street(streetString)
+                        .HouseNumber(houseNrString)
+                        .City(city);
+                Database.addAddress(newAddress);
+
+
+                Address adresaFactory = Database.databaseReadAddresses().get(Database.databaseReadAddresses().size()-1);
+                Database.addFactory(nameString, adresaFactory.getId());
             }
 
-            File factoriesFile = new File("dat/factories.txt");
-            try (BufferedReader lineReader = new BufferedReader(new FileReader(factoriesFile))){
-                String line;
-                String content="";
-                int i = 1;
-                while((line = lineReader.readLine())!=null){
-                    content = content + line + System.lineSeparator();
-                    i++;
-                }
-                content = content +
-                        Integer.valueOf((i/4) + 1).toString() +
-                        System.lineSeparator() +
-                        nameString +
-                        System.lineSeparator() +
-                        idAdress.toString() +
-                        System.lineSeparator() +
-                        chosenItemsString;
-                FileWriter writer = new FileWriter(factoriesFile);
-                writer.write(content);
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+
+            for(Long itemId : chosenItems){
+                Item newItem = Database.getItemById(itemId);
+                System.out.println(Database.databaseReadFactories().get(Database.databaseReadFactories().size()-1).getId());
+                Database.addFactoryItem(Database.databaseReadFactories().get(Database.databaseReadFactories().size()-1), newItem);
             }
+
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("New Factory has been successfully added!");

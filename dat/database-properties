@@ -1,0 +1,3 @@
+databaseUrl = jdbc:h2:tcp://localhost/~/ilipak
+username = admin
+password = admin

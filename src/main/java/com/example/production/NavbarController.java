@@ -80,4 +80,6 @@ public class NavbarController {
         HelloApplication.getMainStage().setScene(scene);
         HelloApplication.getMainStage().show();
     }
+
+
 }

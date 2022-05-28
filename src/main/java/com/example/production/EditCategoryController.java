@@ -1,12 +1,13 @@
 package com.example.production;
 
+import com.example.production.documents.Database;
 import com.example.production.model.Category;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.sql.SQLException;
+
+import static com.example.production.CategoryController.forEdit;
 
 public class EditCategoryController {
 
@@ -19,39 +20,20 @@ public class EditCategoryController {
     private String descriptionS;
 
     public void initialize(){
-        nameS = CategoryController.categoryObservableList.get(CategoryController.forEdit).getName();
-        descriptionS = CategoryController.categoryObservableList.get(CategoryController.forEdit).getDescription();
+        nameS = CategoryController.categoryObservableList.get(forEdit-1).getName();
+        descriptionS = CategoryController.categoryObservableList.get(forEdit-1).getDescription();
 
         name.setText(nameS);
         description.setText(descriptionS);
     }
 
-    public void change(){
+    public void change() throws SQLException {
         String nameString = name.getText();
         String descriptionString = description.getText();
 
-        CategoryController.categoryObservableList.get(CategoryController.forEdit).setName(nameString);
-        CategoryController.categoryObservableList.get(CategoryController.forEdit).setDescription(descriptionString);
-        txtMaker();
-    }
+        CategoryController.categoryObservableList.get(forEdit-1).setName(nameString);
+        CategoryController.categoryObservableList.get(forEdit-1).setDescription(descriptionString);
 
-    public void txtMaker(){
-        String content = "";
-        for (Category category : CategoryController.categoryObservableList){
-            content = content + category.getId().toString() + System.lineSeparator()
-                    + category.getName() + System.lineSeparator()
-                    + category.getDescription();
-
-            if((category.getId().compareTo(Long.valueOf(CategoryController.categoryObservableList.size())))<0){
-                content = content +System.lineSeparator();
-            }
-        }
-        System.out.println(content);
-        File categoryFile = new File("dat/categories.txt");
-        try (FileWriter writer = new FileWriter(categoryFile)) {
-            writer.write(content);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Database.updateCategoryById(Long.valueOf(forEdit), nameString, descriptionString);
     }
 }
